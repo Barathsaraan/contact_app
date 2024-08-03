@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,14 +96,16 @@ class _EditContactScreenState extends State<EditContactScreen> {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.red, // Set the border color here
+                                  color:
+                                      Colors.red, // Set the border color here
                                   width: 4.0, // Set the border width here
                                 ),
                                 color: const Color.fromRGBO(7, 45, 68, 1)),
                             child: const Icon(
                               Icons.person,
                               size: 50,
-                              color: Colors.white, // Set the color of the icon here
+                              color: Colors
+                                  .white, // Set the color of the icon here
                             ),
                           ),
                         )
@@ -158,6 +161,10 @@ class _EditContactScreenState extends State<EditContactScreen> {
                   ),
                 ),
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10),
+                ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a phone number';

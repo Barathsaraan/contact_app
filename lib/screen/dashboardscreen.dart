@@ -83,7 +83,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-    // Request permission
     var status = await Permission.phone.request();
     if (status.isGranted) {
       try {
@@ -95,12 +94,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         );
       }
     } else if (status.isDenied) {
-      // Permission denied
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Phone call permission denied')),
       );
     } else if (status.isPermanentlyDenied) {
-      // Permission permanently denied, take the user to settings
       openAppSettings();
     }
   }
@@ -132,14 +129,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.red, // Set the border color here
-                              width: 4.0, // Set the border width here
+                              color: Colors.red,
+                              width: 4.0,
                             ),
                             color: const Color.fromRGBO(7, 45, 68, 1)),
                         child: const Icon(
                           Icons.person,
                           size: 60,
-                          color: Colors.white, // Set the color of the icon here
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -159,8 +156,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     icon: const Icon(Icons.call),
                     label: const Text('Call'),
                     style: ElevatedButton.styleFrom(
-                      iconColor: Colors.red, // Icon color
-                      backgroundColor: Colors.white, // Background color
+                      iconColor: Colors.red,
+                      backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -221,159 +218,172 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _groupedContacts.length,
-              itemBuilder: (context, index) {
-                String letter = _groupedContacts.keys.elementAt(index);
-                List<Map<String, dynamic>> contacts = _groupedContacts[letter]!;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        letter,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+            child: _groupedContacts.isEmpty
+                ? Center(
+                    child: Text(
+                      'No data found',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[600],
                       ),
                     ),
-                    ...contacts.map((contact) => Card(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          elevation: 0,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                  )
+                : ListView.builder(
+                    itemCount: _groupedContacts.length,
+                    itemBuilder: (context, index) {
+                      String letter = _groupedContacts.keys.elementAt(index);
+                      List<Map<String, dynamic>> contacts =
+                          _groupedContacts[letter]!;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              letter,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          child: ListTile(
-                            leading: contact['imagePath'] != null &&
-                                    contact['imagePath'].isNotEmpty
-                                ? CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage:
-                                        FileImage(File(contact['imagePath'])),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Colors.red,
-                                          width: 4.0,
+                          ...contacts.map((contact) => Card(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                elevation: 0,
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ListTile(
+                                  leading: contact['imagePath'] != null &&
+                                          contact['imagePath'].isNotEmpty
+                                      ? CircleAvatar(
+                                          radius: 30,
+                                          backgroundImage: FileImage(
+                                              File(contact['imagePath'])),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Colors.red,
+                                                width: 4.0,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 30,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  color: Colors.red,
+                                                  width: 4.0,
+                                                ),
+                                                color: const Color.fromRGBO(
+                                                    7, 45, 68, 1)),
+                                            child: const Icon(
+                                              Icons.person,
+                                              size: 45,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  )
-                                : CircleAvatar(
-                                    radius: 30,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Colors
-                                                .red, // Set the border color here
-                                            width:
-                                                4.0, // Set the border width here
-                                          ),
-                                          color: const Color.fromRGBO(
-                                              7, 45, 68, 1)),
-                                      child: const Icon(
-                                        Icons.person,
-                                        size: 45,
-                                        color: Colors
-                                            .white, // Set the color of the icon here
-                                      ),
-                                    ),
+                                  title: Text(contact['name'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(contact['email']),
+                                      Text(contact['phone']),
+                                    ],
                                   ),
-                            title: Text(contact['name'],
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(contact['email']),
-                                Text(contact['phone']),
-                              ],
-                            ),
-                            trailing: PopupMenuButton<String>(
-                              onSelected: (String value) {
-                                if (value == 'edit') {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditContactScreen(
-                                        contact: contact,
-                                        index: _contacts.indexOf(contact),
-                                      ),
-                                    ),
-                                  ).then((_) => _loadContacts());
-                                } else if (value == 'delete') {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Delete Contact'),
-                                        content: const Text(
-                                            'Are you sure you want to delete this contact?'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: const Text('Cancel'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
+                                  trailing: PopupMenuButton<String>(
+                                    onSelected: (String value) {
+                                      if (value == 'edit') {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditContactScreen(
+                                              contact: contact,
+                                              index: _contacts.indexOf(contact),
+                                            ),
                                           ),
-                                          TextButton(
-                                            child: const Text('Delete'),
-                                            onPressed: () {
-                                              _deleteContact(
-                                                  _contacts.indexOf(contact));
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
+                                        ).then((_) => _loadContacts());
+                                      } else if (value == 'delete') {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title:
+                                                  const Text('Delete Contact'),
+                                              content: const Text(
+                                                  'Are you sure you want to delete this contact?'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('Cancel'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: const Text('Delete'),
+                                                  onPressed: () {
+                                                    _deleteContact(_contacts
+                                                        .indexOf(contact));
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
                                     },
-                                  );
-                                }
-                              },
-                              itemBuilder: (BuildContext context) {
-                                return [
-                                  const PopupMenuItem<String>(
-                                    value: 'edit',
-                                    child: Text('Edit'),
+                                    itemBuilder: (context) => [
+                                      const PopupMenuItem<String>(
+                                        value: 'edit',
+                                        child: Text('Edit'),
+                                      ),
+                                      const PopupMenuItem<String>(
+                                        value: 'delete',
+                                        child: Text('Delete'),
+                                      ),
+                                    ],
                                   ),
-                                  const PopupMenuItem<String>(
-                                    value: 'delete',
-                                    child: Text('Delete'),
-                                  ),
-                                ];
-                              },
-                            ),
-                            onTap: () => _showContactDetails(contact),
-                          ),
-                        )),
-                  ],
-                );
-              },
-            ),
+                                  onTap: () => _showContactDetails(contact),
+                                ),
+                              )),
+                        ],
+                      );
+                    },
+                  ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddContactScreen()),
-          ).then((_) => _loadContacts());
-        },
         backgroundColor: const Color.fromRGBO(7, 45, 68, 1),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        onPressed: () async {
+          bool? result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddContactScreen(),
+            ),
+          );
+
+          // Refresh the contacts if a new contact was added
+          if (result == true) {
+            _loadContacts();
+          }
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 }

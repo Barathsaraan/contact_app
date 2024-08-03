@@ -17,16 +17,8 @@ class _AddContactScreenState extends State<AddContactScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _name, _email, _phone;
   File? _imageFile;
-  double? _latitude, _longitude;
-  String? _address;
-  bool _isImagePicked = false; // Add this variable to track image selection
-
+  bool _isImagePicked = false;
   final ImagePicker _picker = ImagePicker();
-
-  Future<void> _getCurrentLocation() async {
-    // Implement location retrieval logic
-    // Set _latitude, _longitude, _address accordingly
-  }
 
   Future<void> _chooseImage() async {
     try {
@@ -34,12 +26,11 @@ class _AddContactScreenState extends State<AddContactScreen> {
       if (pickedFile != null) {
         setState(() {
           _imageFile = File(pickedFile.path);
-          _isImagePicked = true; // Update this variable when an image is picked
+          _isImagePicked = true;
         });
       }
     } catch (e) {
       print('Error picking image: $e');
-      // Show an error message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to pick image: $e')),
       );
@@ -49,7 +40,6 @@ class _AddContactScreenState extends State<AddContactScreen> {
   void _saveContact() async {
     if (_formKey.currentState?.validate() ?? false) {
       if (!_isImagePicked) {
-        // Check if an image has been picked
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please choose an image')),
         );
@@ -69,14 +59,8 @@ class _AddContactScreenState extends State<AddContactScreen> {
       contacts.add(json.encode(newContact));
       await prefs.setStringList('contacts', contacts);
 
-      Navigator.pop(context);
+      Navigator.pop(context, true);  // Pass true to indicate a contact was added
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentLocation(); // Optionally get location on init
   }
 
   @override
