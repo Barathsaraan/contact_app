@@ -378,7 +378,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           );
 
-          // Refresh the contacts if a new contact was added
+        
           if (result == true) {
             _loadContacts();
           }

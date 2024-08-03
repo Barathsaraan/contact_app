@@ -60,7 +60,7 @@ class _EditContactScreenState extends State<EditContactScreen> {
       contacts[widget.index] = json.encode(updatedContact);
       await prefs.setStringList('contacts', contacts);
 
-      Navigator.pop(context, true); // Return true to indicate changes were made
+      Navigator.pop(context, true); 
     }
   }
 
@@ -97,15 +97,15 @@ class _EditContactScreenState extends State<EditContactScreen> {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color:
-                                      Colors.red, // Set the border color here
-                                  width: 4.0, // Set the border width here
+                                      Colors.red,
+                                  width: 4.0, 
                                 ),
                                 color: const Color.fromRGBO(7, 45, 68, 1)),
                             child: const Icon(
                               Icons.person,
                               size: 50,
                               color: Colors
-                                  .white, // Set the color of the icon here
+                                  .white,
                             ),
                           ),
                         )

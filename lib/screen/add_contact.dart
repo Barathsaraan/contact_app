@@ -59,7 +59,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
       contacts.add(json.encode(newContact));
       await prefs.setStringList('contacts', contacts);
 
-      Navigator.pop(context, true);  // Pass true to indicate a contact was added
+      Navigator.pop(context, true); 
     }
   }
 
